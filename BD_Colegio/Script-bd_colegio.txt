@@ -1,3 +1,5 @@
+--JOHAN PALMA BURGOS
+
 -- creo las tablas de la base de datos
 
 create table rol
