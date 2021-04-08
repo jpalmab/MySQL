@@ -1,6 +1,10 @@
+--creo la base de datos
 create database alquiler_v;
+
+--utilizo la base de datos creada
 use alquiler_v;
 
+--creo las tablas de la base de datos 
 create table rol
 (
 	cod_rol int primary key,
@@ -23,8 +27,7 @@ create table usuario
     primary key(cod_usuario)
 );
 
-ALTER TABLE usuario add constraint FK_U_R 
-	foreign key(cod_rol) references rol(cod_rol);
+
     
 create table tipo_servicio
 (
@@ -40,8 +43,6 @@ create table tipo_objeto
     cod_tipo_servicio int
 );
 
-ALTER TABLE tipo_objeto add constraint FK_TO_TS
-	foreign key(cod_tipo_servicio) references tipo_servicio(cod_tipo_servicio);
 
 create table objeto
 (
@@ -65,9 +66,6 @@ create table objeto
     primary key(cod_objeto)
 );
 
-ALTER TABLE objeto add constraint FK_O_TO 
-	foreign key(cod_tipo_objeto) references tipo_objeto(cod_tipo_objeto);
-
 create table factura
 (
 	cod_factura int NOT NULL AUTO_INCREMENT,
@@ -76,9 +74,6 @@ create table factura
     val_factura double,
     primary key(cod_factura)
 );
-
-ALTER TABLE factura add constraint FK_F_U
-    foreign key(cod_usuario) references usuario(cod_usuario);
 
 
 create table detalle
@@ -91,13 +86,6 @@ create table detalle
     primary key(cod_detalle)
 );
 
-ALTER TABLE detalle add constraint FK_D_O 
-	foreign key(cod_objeto) references objeto(cod_objeto);
-    
-ALTER TABLE detalle add constraint FK_D_F
-	foreign key(cod_factura) references factura(cod_factura);
-
-
 create table sugerencia
 (
     cod_sugerencia int NOT NULL AUTO_INCREMENT,
@@ -107,6 +95,28 @@ create table sugerencia
     fecha_sugerencia date,
     primary key(cod_sugerencia)
 );
+
+
+-- creo las relaciones de las tablas de la base de datos
+
+ALTER TABLE usuario add constraint FK_U_R 
+	foreign key(cod_rol) references rol(cod_rol);
+
+ALTER TABLE tipo_objeto add constraint FK_TO_TS
+	foreign key(cod_tipo_servicio) references tipo_servicio(cod_tipo_servicio);
+
+ALTER TABLE objeto add constraint FK_O_TO 
+	foreign key(cod_tipo_objeto) references tipo_objeto(cod_tipo_objeto);
+
+ALTER TABLE factura add constraint FK_F_U
+    foreign key(cod_usuario) references usuario(cod_usuario);
+
+
+ALTER TABLE detalle add constraint FK_D_O 
+	foreign key(cod_objeto) references objeto(cod_objeto);
+    
+ALTER TABLE detalle add constraint FK_D_F
+	foreign key(cod_factura) references factura(cod_factura);
 
 ALTER TABLE sugerencia add constraint FK_S_F
 	foreign key(cod_factura) references factura(cod_factura);
