@@ -1,0 +1,113 @@
+create database alquiler_v;
+use alquiler_v;
+
+create table rol
+(
+	cod_rol int primary key,
+    nom_rol varchar(200)
+);
+
+create table usuario
+(
+	cod_usuario int NOT NULL AUTO_INCREMENT, 
+    nom_usuario varchar(100),
+    ape_usuario varchar(100),
+    gen_usuario ENUM('M','F'),
+    fecha_nacimiento_usuario date,
+    cedula_usuario int,
+    tel_usuario varchar(15),
+    correo_usuario varchar(100),
+	nickname_usuario varchar(100),
+    contrase_usuario varchar(100),
+    cod_rol int,
+    primary key(cod_usuario)
+);
+
+ALTER TABLE usuario add constraint FK_U_R 
+	foreign key(cod_rol) references rol(cod_rol);
+    
+create table tipo_servicio
+(
+	cod_tipo_servicio int primary key,
+    nom_tipo_servicio varchar(100)
+);
+
+
+create table tipo_objeto
+(
+	cod_tipo_objeto int primary key,
+    nom_tipo_objeto varchar(200), 
+    cod_tipo_servicio int
+);
+
+ALTER TABLE tipo_objeto add constraint FK_TO_TS
+	foreign key(cod_tipo_servicio) references tipo_servicio(cod_tipo_servicio);
+
+create table objeto
+(
+	cod_objeto int NOT NULL AUTO_INCREMENT,
+    nom_objeto varchar(100),
+    color_objeto varchar(100),
+    placa_objeto varchar(100),
+    marca_objeto varchar(100),
+    modelo_objeto int,
+    descripcion_objeto text,
+    precio_alquilerDia_objeto double,
+    precio_alquilerSemana_objeto double,
+    precio_alquilerMes_objeto double,
+	capacidad_carga_objeto double,
+    combustible_objeto varchar(100),
+    tipo_servicio_objeto varchar(100),
+    cantidad_personas_objeto int,
+    foto varchar(250),
+    disponibilidad_alquiler varchar(130),
+    cod_tipo_objeto int,
+    primary key(cod_objeto)
+);
+
+ALTER TABLE objeto add constraint FK_O_TO 
+	foreign key(cod_tipo_objeto) references tipo_objeto(cod_tipo_objeto);
+
+create table factura
+(
+	cod_factura int NOT NULL AUTO_INCREMENT,
+	cod_usuario int,
+    fecha_factura date,
+    val_factura double,
+    primary key(cod_factura)
+);
+
+ALTER TABLE factura add constraint FK_F_U
+    foreign key(cod_usuario) references usuario(cod_usuario);
+
+
+create table detalle
+(
+	cod_detalle int NOT NULL AUTO_INCREMENT,
+    cod_objeto int,
+    cod_factura int,
+    fecha_inicio_alquiler date,
+    fecha_fin_alquiler date,
+    primary key(cod_detalle)
+);
+
+ALTER TABLE detalle add constraint FK_D_O 
+	foreign key(cod_objeto) references objeto(cod_objeto);
+    
+ALTER TABLE detalle add constraint FK_D_F
+	foreign key(cod_factura) references factura(cod_factura);
+
+
+create table sugerencia
+(
+    cod_sugerencia int NOT NULL AUTO_INCREMENT,
+    titulo_sugerencia varchar(100),
+    descripcion_sugerencia text,
+    cod_factura int,
+    fecha_sugerencia date,
+    primary key(cod_sugerencia)
+);
+
+ALTER TABLE sugerencia add constraint FK_S_F
+	foreign key(cod_factura) references factura(cod_factura);
+    

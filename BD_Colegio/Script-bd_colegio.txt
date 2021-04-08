@@ -1,0 +1,110 @@
+-- creo las tablas de la base de datos
+
+create table rol
+(
+	cod_rol int primary key,
+    nom_rol varchar(100)
+);
+
+create table funcionario
+(
+	cod_funcionario int primary key,
+    nom_funcionario varchar(100),
+    ape_funcionario varchar(100),
+    correo varchar(100),
+    usuario varchar(100),
+    clave varchar(100),
+    cod_rol int
+);
+select * from funcionario;
+create table estudiante
+(
+	cod_estudiante int primary key,
+    nom_estudiante varchar(100),
+    ape_estudiante varchar(100),
+    fecha_nacimiento varchar(100), 
+    sexo_estudiante varchar(70)
+);
+create table grado
+(
+	cod_grado int primary key,
+    nom_grado varchar(200)
+);
+
+create table materia
+(
+	cod_materia int primary key,
+    nom_materia varchar(200)
+);
+
+create table calificacion
+(
+	cod_materia int,
+    cod_estudiante int,
+    val_nota1 double,
+    val_nota2 double,
+    val_nota3 double,
+    val_nota4 double,
+    val_nota_promedio double,
+    primary key(cod_materia, cod_estudiante)
+);
+select * from materia;
+insert into materia values(4, "MATERIA CON CODIGO 4");
+
+delete from materia where cod_materia = 2;
+
+create table matricula
+(
+	cod_matricula varchar(160),
+    cod_estudiante int,
+    cod_grado int,
+    cod_funcionario int,
+    primary key(cod_matricula, cod_estudiante)
+);
+
+
+-- creo las relaciones entre las tablas, siguiendo la 3era forma normal
+ALTER TABLE funcionario add constraint FK_f_r
+  FOREIGN KEY(cod_rol) references rol(cod_rol);
+  
+ALTER TABLE matricula add constraint FK_m_f
+  FOREIGN KEY(cod_funcionario) references funcionario(cod_funcionario);  
+  
+ALTER TABLE matricula add constraint FK_m_g
+  FOREIGN KEY(cod_grado) references grado(cod_grado); 
+  
+ALTER TABLE matricula add constraint FK_m_e
+  FOREIGN KEY(cod_estudiante) references estudiante(cod_estudiante);   
+
+ALTER TABLE calificacion add constraint FK_e_c
+  FOREIGN KEY(cod_estudiante) references estudiante(cod_estudiante);
+
+ALTER TABLE calificacion add constraint FK_c_m
+  FOREIGN KEY(cod_materia) references materia(cod_materia);
+  
+
+-- inserto la información en la base de datos
+insert into rol values(1, "Secretaria");
+insert into rol values(2, "Docente");
+insert into rol values(3, "Administrador");
+insert into rol values(4, "Rector");
+insert into rol values(5, "Coordinador Académico");
+
+insert into funcionario values(1, "SECRETARIA", "PALMA_BURGOS", "J@HOTMAIL.COM", "secretaria", "1234", 1);
+insert into funcionario values(2, "DOCENTE", "PALMA_BURGOS", "J@HOTMAIL.COM", "docente", "1234", 2);
+insert into funcionario values(3, "ADMINISTRADOR", "PALMA_BURGOS", "J@HOTMAIL.COM", "administrador", "1234", 3);
+insert into funcionario values(4, "RECTOR", "PALMA_BURGOS", "J@HOTMAIL.COM", "rector", "1234", 4);
+insert into funcionario values(5, "COORDINADOR", "PALMA_BURGOS", "J@HOTMAIL.COM", "coordinador", "1234", 5);
+
+insert into grado values(1, "Curso 1");
+insert into grado values(2, "Curso 2");
+
+insert into estudiante values(1, "Felipe", "Herrera", "12/01/2000", "Masculino");
+insert into estudiante values(2, "Andres", "Torres", "12/01/2000", "Masculino");
+
+insert into matricula values(11111, 1, 1, 1);
+
+insert into materia values(1, "Grado 1");
+insert into materia values(2, "Grado 2");
+
+insert into calificacion values(1, 1, 10, 20, 30, 40, 0000);
